@@ -1,0 +1,20 @@
+DXLog QSO Recorder — Third-Party Notices
+========================================
+
+NAudio
+------
+Project: https://github.com/naudio/NAudio
+License: MIT
+
+NAudio.Lame
+-----------
+Project: https://github.com/Corey-M/NAudio.Lame
+Provides a .NET wrapper for libmp3lame.
+
+LAME MP3 Encoder
+----------------
+Project: https://lame.sourceforge.io/
+License: GNU Lesser General Public License (LGPL).
+
+The release uses NuGet packages during build. Preserve the applicable license notices
+when redistributing the resulting application.

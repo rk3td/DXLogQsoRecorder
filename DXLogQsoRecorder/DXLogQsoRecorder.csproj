@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>DXLogQsoRecorder</AssemblyName>
+    <RootNamespace>DXLogQsoRecorder</RootNamespace>
+    <Version>1.1.0</Version>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
+    <Product>DXLog QSO Recorder</Product>
+    <Description>Audio recorder for DXLog.net</Description>
+    <Authors>Sergey Zimin (RK3TD)</Authors>
+    <Copyright>© 2026 Sergey Zimin</Copyright>
+    <ApplicationIcon>AppIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="2.2.1" />
+    <PackageReference Include="NAudio.Lame" Version="2.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="AppIcon.png" />
+    <Resource Include="AppIcon.ico" />
+  </ItemGroup>
+</Project>

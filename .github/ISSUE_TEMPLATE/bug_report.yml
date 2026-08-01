@@ -1,0 +1,74 @@
+name: Bug report
+description: Report reproducible incorrect behavior
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for helping improve DXLog QSO Recorder.
+  - type: input
+    id: version
+    attributes:
+      label: Application version
+      placeholder: "1.1.0"
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+      placeholder: "Windows 11 24H2"
+    validations:
+      required: true
+  - type: input
+    id: dxlog
+    attributes:
+      label: DXLog.net version
+      placeholder: "2.6.30"
+    validations:
+      required: true
+  - type: input
+    id: audio
+    attributes:
+      label: Audio capture device
+      description: Include the exact device name shown by the application.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Start the recorder...
+        2. Select...
+        3. Enter a QSO...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: Relevant recorder.log excerpt
+      render: text
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I tested the latest release.
+          required: true
+        - label: I searched existing issues.
+          required: true
+        - label: I removed private or sensitive information from the log.
+          required: true

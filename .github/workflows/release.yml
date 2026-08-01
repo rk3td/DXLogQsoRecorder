@@ -1,0 +1,60 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 8.0.x
+          cache: true
+          cache-dependency-path: DXLogQsoRecorder/DXLogQsoRecorder.csproj
+
+      - name: Restore
+        run: dotnet restore .\DXLogQsoRecorder\DXLogQsoRecorder.csproj
+
+      - name: Publish portable Windows x64 build
+        run: >-
+          dotnet publish .\DXLogQsoRecorder\DXLogQsoRecorder.csproj
+          -c Release
+          -r win-x64
+          --self-contained true
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:DebugType=None
+          -p:DebugSymbols=false
+          -o .\artifacts\win-x64
+
+      - name: Add release documentation
+        shell: pwsh
+        run: |
+          Copy-Item README.md .\artifacts\win-x64\README.md
+          Copy-Item LICENSE .\artifacts\win-x64\LICENSE.txt
+          Copy-Item THIRD_PARTY_NOTICES.txt .\artifacts\win-x64\THIRD_PARTY_NOTICES.txt
+
+      - name: Create ZIP archive
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          Compress-Archive -Path .\artifacts\win-x64\* -DestinationPath ".\artifacts\DXLogQsoRecorder-$tag-win-x64-portable.zip" -Force
+
+      - name: Create GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = "${{ github.ref_name }}"
+          gh release create $tag ".\artifacts\DXLogQsoRecorder-$tag-win-x64-portable.zip" --generate-notes --title "DXLog QSO Recorder $tag"
