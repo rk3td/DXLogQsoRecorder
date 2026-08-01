@@ -152,6 +152,11 @@ DXLog QSO Recorder is released under the [MIT License](LICENSE).
 
 ![DXLog QSO Recorder main window](screenshots/main-window.png)
 
+## Download
+
+Download the latest Portable release from the
+[Releases page](https://github.com/rk3td/DXLogQsoRecorder/releases/latest).
+
 ## Author
 
 Sergey Zimin (RK3TD)  
