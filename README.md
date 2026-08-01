@@ -148,6 +148,10 @@ See [THIRD_PARTY_NOTICES.txt](THIRD_PARTY_NOTICES.txt).
 
 DXLog QSO Recorder is released under the [MIT License](LICENSE).
 
+## Screenshot
+
+![DXLog QSO Recorder main window](screenshots/main-window.png)
+
 ## Author
 
 Sergey Zimin (RK3TD)  
