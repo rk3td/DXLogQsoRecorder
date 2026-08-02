@@ -2,7 +2,7 @@
 setlocal
 cd /d "%~dp0"
 
-echo Publishing DXLog QSO Recorder v1.1.0 by RK3TD...
+echo Publishing DXLog QSO Recorder v1.2.3 by RK3TD...
 dotnet publish "DXLogQsoRecorder\DXLogQsoRecorder.csproj" -c Release -r win-x64 --self-contained true ^
   -p:PublishSingleFile=true ^
   -p:IncludeNativeLibrariesForSelfExtract=true ^

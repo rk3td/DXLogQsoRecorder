@@ -18,3 +18,8 @@ License: GNU Lesser General Public License (LGPL).
 
 The release uses NuGet packages during build. Preserve the applicable license notices
 when redistributing the resulting application.
+
+Microsoft.Data.Sqlite
+Copyright (c) .NET Foundation and Contributors
+Licensed under the MIT License.
+https://github.com/dotnet/efcore

@@ -1,50 +1,43 @@
-<p align="center">
-  <img src="DXLogQsoRecorder/AppIcon.png" width="128" alt="DXLog QSO Recorder icon">
-</p>
+# DXLog QSO Recorder
 
-<h1 align="center">DXLog QSO Recorder</h1>
+**Version 1.2.3**  
+Portable audio recorder for DXLog.net  
+Author: Sergey Zimin (RK3TD)
 
-<p align="center">
-  Portable per-QSO audio recorder for DXLog.net on Windows 10/11.
-</p>
+## Purpose
 
-<p align="center">
-  <a href="../../actions/workflows/build.yml"><img alt="Build" src="../../actions/workflows/build.yml/badge.svg"></a>
-  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
-  <img alt="Platform" src="https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-blue">
-  <img alt=".NET" src="https://img.shields.io/badge/.NET-8.0-512BD4">
-</p>
+DXLog QSO Recorder automatically saves an audio fragment for every new QSO received from DXLog.net through its UDP XML broadcast.
 
-## Overview
+The application is designed for Windows 10 and Windows 11 and is distributed only as a portable application. It does not require installation and does not use the Windows Registry.
 
-DXLog QSO Recorder listens for DXLog.net `contactinfo` XML messages over UDP and automatically saves a separate audio fragment for every new QSO.
+## Highlights of version 1.2.3
 
-The application is distributed as a **portable Windows application**. It does not require installation and does not use the Windows Registry.
+- DPI-safe station conflict dialog with readable buttons.
+- Station selection is requested only once per Start/Stop recording session.
 
-## Features
+- automatic session-based filtering by DXLog `stationid`;
+- the first valid QSO establishes the active station;
+- a 20-second warning when another station is detected;
+- options to keep the current station, switch station, or record all stations;
+- the station choice remains active until Stop is pressed;
+- the recording browser, search, player, and portable SQLite index remain available.
 
-- Windows audio capture-device selection;
-- circular pre-buffer from 1 to 600 seconds;
-- post-buffer from 0 to 600 seconds;
-- MP3 output at 32, 48, or 64 kbps;
-- automatic WAV fallback if MP3 encoding fails;
-- first-channel extraction from multichannel sources;
-- normalization to 24,000 Hz, 16-bit PCM, mono;
-- DXLog.net `contactinfo` XML reception over UDP;
-- default local bind address `127.0.0.1`;
-- contest-based recording directories;
-- portable settings, logs, packets, temporary files, and recordings;
-- no automatic deletion of recordings.
+## Audio processing
 
-## Download
+Before MP3 encoding, the selected source is normalized to:
 
-Download the latest ready-to-run Portable ZIP from the repository's **Releases** page. The package is self-contained and does not require a separate .NET installation.
+- channel 1 only;
+- 24,000 Hz sample rate;
+- 16-bit PCM;
+- mono.
 
-Windows may display a SmartScreen warning for an unsigned executable. Verify that the file came from this repository's Releases page before running it.
+This allows mono, stereo, four-channel, and other multichannel capture devices to be used without passing an unsupported channel count to LAME.
 
-## File naming and storage
+If MP3 encoding fails for any reason, the original recording is preserved as a WAV file.
 
-Recordings are grouped by the contest name supplied by DXLog.net:
+## Recording structure
+
+Recordings are grouped by the DXLog contest name:
 
 ```text
 Recordings/
@@ -54,72 +47,66 @@ Recordings/
   Unknown/
 ```
 
-File names use this format:
+The directory name is taken from the `contestname` field. Characters not allowed in Windows file names are replaced with underscores. If the contest name is missing, the `Unknown` directory is used.
+
+File names use the following format:
 
 ```text
 yyyyMMdd_HHmmss_MYCALL_CALL_BAND_MODE.mp3
 ```
 
-Example:
+## Main features
 
-```text
-20260730_142804_RT2C_RN3TT_21MHz_CW.mp3
-```
+- Windows audio capture-device selection;
+- circular pre-buffer from 1 to 600 seconds;
+- post-buffer from 0 to 600 seconds;
+- MP3 output at 32, 48, or 64 kbps;
+- 24 kHz, 16-bit PCM, mono normalization;
+- first-channel extraction for multichannel sources;
+- automatic WAV fallback;
+- DXLog `contactinfo` XML reception;
+- default bind address `127.0.0.1`;
+- portable settings, logs, packets, temporary files, and recordings;
+- no automatic deletion of recordings.
 
-## DXLog.net configuration
+## Recommended DXLog settings
 
-Recommended local UDP settings:
+Configure DXLog.net to send `contactinfo` UDP XML broadcasts to:
 
 ```text
 Address: 127.0.0.1
 Port:    12060
 ```
 
-Use the same values in DXLog QSO Recorder. See [DXLog.net setup](docs/DXLOG_SETUP.md) for a basic test procedure.
+Use the same values in DXLog QSO Recorder.
 
-## Audio processing
+## Portable build for Windows x64
 
-Before MP3 encoding, the source is converted to:
-
-```text
-Channel:     first channel only
-Sample rate: 24,000 Hz
-Sample type: 16-bit PCM
-Channels:    mono
-```
-
-This permits mono, stereo, four-channel, and other multichannel capture devices to be used without passing an unsupported channel count to LAME. If conversion or MP3 encoding fails, the original recording is retained as WAV.
-
-## Building from source
-
-Requirements:
-
-- Windows 10 or Windows 11;
-- .NET 8 SDK.
-
-Run:
+1. Install the .NET 8 SDK.
+2. Extract the source archive.
+3. Run:
 
 ```text
 build-portable-win-x64.cmd
 ```
 
-Or use PowerShell:
+Alternatively, run from PowerShell:
 
 ```powershell
 powershell.exe -ExecutionPolicy Bypass -File .\build-portable-win-x64.ps1
 ```
 
-The portable output is written to:
+The output is created in:
 
 ```text
-publish/win-x64
+publish\win-x64
 ```
 
-The first build requires internet access to restore NuGet packages.
+The first build requires internet access to download the NAudio and NAudio.Lame NuGet packages.
 
-## Runtime data
+## Portable data
 
-All data is stored relative to the application directory:
+At runtime, all data is stored relative to the application directory:
 
 ```text
 Data/settings.json
@@ -129,35 +116,32 @@ Temp/
 Recordings/
 ```
 
-## Contributing and support
-
-- Read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting changes.
-- Use GitHub Issues for reproducible bugs and focused feature requests.
-- See [SUPPORT.md](SUPPORT.md) for the information to include.
-- Security issues should be reported according to [SECURITY.md](SECURITY.md).
-
 ## Third-party components
 
 - NAudio — MIT License
 - NAudio.Lame — .NET wrapper for LAME
 - LAME MP3 Encoder — GNU LGPL
 
-See [THIRD_PARTY_NOTICES.txt](THIRD_PARTY_NOTICES.txt).
-
-## License
-
-DXLog QSO Recorder is released under the [MIT License](LICENSE).
-
-## Screenshot
-
-![DXLog QSO Recorder main window](screenshots/main-window.png)
-
-## Download
-
-Download the latest Portable release from the
-[Releases page](https://github.com/rk3td/DXLogQsoRecorder/releases/latest).
+See `THIRD_PARTY_NOTICES.txt` for details.
 
 ## Author
 
-Sergey Zimin (RK3TD)  
+Sergey Zimin  
+Callsign: RK3TD
+
 © 2026 Sergey Zimin
+
+
+## Recording browser and player
+
+Version 1.2.0 added a searchable recordings library. The application builds a portable SQLite index at `Data/recordings.db`, scans existing MP3/WAV files, and supports filtering by callsign and contest. Double-click a result or use the Play button to listen without leaving the application. The index can be deleted safely and is rebuilt from the `Recordings` folder.
+
+## Multi-Op station filtering
+
+During each recording session, the first QSO packet with a non-empty DXLog `stationid` becomes the active station. If a later QSO arrives from another station, the recorder shows a 20-second warning with three choices:
+
+- keep recording the original station (default);
+- switch to the newly detected station;
+- record QSO events from all stations.
+
+The choice is kept only until **Stop** is pressed.

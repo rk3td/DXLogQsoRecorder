@@ -1,8 +1,46 @@
 # Changelog
 
+## [1.2.3] - 2026-08-02
+
+### Fixed
+
+- The DXLog station conflict dialog now scales correctly at higher Windows DPI settings and no longer clips button captions.
+- The station choice is now asked only once per recording session.
+- Keep, switch, record-all, and the 20-second timeout decisions remain locked until Stop is pressed.
+
+
+## [1.2.2] - 2026-08-02
+
+### Added
+- Automatic DXLog `stationid` session detection for Multi-Op networks.
+- The first valid QSO packet establishes the active station for the current recording session.
+- A 20-second non-blocking warning when a QSO from another station is detected.
+- Choices to keep the current station, switch to the new station, or record all stations.
+- The choice remains active until Stop is pressed.
+
+### Changed
+- Foreign-station QSO packets no longer start recordings unless the operator switches station or enables all-station recording.
+
+## [1.2.1] - 2026-08-01
+
+### Fixed
+
+- Create the portable `Data` directory before opening `Data/recordings.db`.
+- Prevent the application from terminating silently when startup initialization fails.
+- Write unhandled startup exceptions to `startup-error.log` and show the error location.
+- Add a defensive directory check inside `RecordingIndexService`.
+
+## [1.2.0] - 2026-08-01
+
+### Added
+- Recordings browser with combined callsign and contest filters.
+- Portable SQLite index stored in `Data/recordings.db`.
+- Automatic indexing of existing MP3 and WAV recordings.
+- Built-in playback with play, pause, stop, seek, time display, and folder opening.
+- Automatic index update after each completed recording.
+
 ## 1.1.0 — English edition
 
-- Added GitHub repository support files, CI build, automated tagged releases, issue forms, and contribution documentation.
 - Converted the complete user interface to English.
 - Converted validation, status, warning, and error messages to English.
 - Converted remaining source-code exception messages to English.

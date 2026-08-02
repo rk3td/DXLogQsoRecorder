@@ -7,9 +7,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>DXLogQsoRecorder</AssemblyName>
     <RootNamespace>DXLogQsoRecorder</RootNamespace>
-    <Version>1.1.0</Version>
-    <AssemblyVersion>1.1.0.0</AssemblyVersion>
-    <FileVersion>1.1.0.0</FileVersion>
+    <Version>1.2.3</Version>
+    <AssemblyVersion>1.2.3.0</AssemblyVersion>
+    <FileVersion>1.2.3.0</FileVersion>
     <Product>DXLog QSO Recorder</Product>
     <Description>Audio recorder for DXLog.net</Description>
     <Authors>Sergey Zimin (RK3TD)</Authors>
@@ -19,6 +19,7 @@
   <ItemGroup>
     <PackageReference Include="NAudio" Version="2.2.1" />
     <PackageReference Include="NAudio.Lame" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.7" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="AppIcon.png" />
