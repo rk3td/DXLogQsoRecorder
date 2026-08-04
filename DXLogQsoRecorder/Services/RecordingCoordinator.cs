@@ -110,13 +110,18 @@ public sealed class RecordingCoordinator : IDisposable
             LogService.Write($"[INFO] Source format: {DescribeFormat(reader.WaveFormat)}");
 
             ISampleProvider samples = reader.ToSampleProvider();
-            var firstChannel = new FirstChannelSampleProvider(samples);
-            ISampleProvider resampled = firstChannel.WaveFormat.SampleRate == 24000
-                ? firstChannel
-                : new WdlResamplingSampleProvider(firstChannel, 24000);
+            var selectedChannels = new LeadingChannelsSampleProvider(samples);
+            ISampleProvider resampled = selectedChannels.WaveFormat.SampleRate == 24000
+                ? selectedChannels
+                : new WdlResamplingSampleProvider(selectedChannels, 24000);
             var normalized = new SampleToWaveProvider16(resampled);
 
-            LogService.Write($"[INFO] Audio normalization: channel 1 -> 24000 Hz, 16-bit PCM, mono");
+            var channelDescription = selectedChannels.WaveFormat.Channels == 1
+                ? "channel 1 -> mono"
+                : reader.WaveFormat.Channels == 2
+                    ? "channels 1-2 -> stereo"
+                    : $"channels 1-2 of {reader.WaveFormat.Channels} -> stereo";
+            LogService.Write($"[INFO] Audio normalization: {channelDescription}, 24000 Hz, 16-bit PCM");
             LogService.Write($"[INFO] MP3 encoding started: {p.Qso.Call}; bitrate={p.BitrateKbps} kbps");
             using var writer = new LameMP3FileWriter(
                 p.FinalMp3Path,
@@ -156,20 +161,22 @@ public sealed class RecordingCoordinator : IDisposable
     private static string DescribeFormat(WaveFormat format) =>
         $"{format.SampleRate} Hz, {format.BitsPerSample}-bit, {format.Channels} channel(s), {format.Encoding}";
 
-    private sealed class FirstChannelSampleProvider : ISampleProvider
+    private sealed class LeadingChannelsSampleProvider : ISampleProvider
     {
         private readonly ISampleProvider _source;
         private readonly int _sourceChannels;
+        private readonly int _outputChannels;
         private float[] _sourceBuffer = Array.Empty<float>();
 
-        public FirstChannelSampleProvider(ISampleProvider source)
+        public LeadingChannelsSampleProvider(ISampleProvider source)
         {
             _source = source ?? throw new ArgumentNullException(nameof(source));
             _sourceChannels = source.WaveFormat.Channels;
             if (_sourceChannels < 1)
                 throw new InvalidOperationException("The audio source does not contain any channels.");
 
-            WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(source.WaveFormat.SampleRate, 1);
+            _outputChannels = Math.Min(_sourceChannels, 2);
+            WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(source.WaveFormat.SampleRate, _outputChannels);
         }
 
         public WaveFormat WaveFormat { get; }
@@ -178,17 +185,33 @@ public sealed class RecordingCoordinator : IDisposable
         {
             if (count <= 0) return 0;
 
-            var requiredSourceSamples = checked(count * _sourceChannels);
+            var requestedFrames = count / _outputChannels;
+            if (requestedFrames <= 0) return 0;
+
+            var requiredSourceSamples = checked(requestedFrames * _sourceChannels);
             if (_sourceBuffer.Length < requiredSourceSamples)
                 _sourceBuffer = new float[requiredSourceSamples];
 
             var sourceSamplesRead = _source.Read(_sourceBuffer, 0, requiredSourceSamples);
             var framesRead = sourceSamplesRead / _sourceChannels;
 
-            for (var frame = 0; frame < framesRead; frame++)
-                buffer[offset + frame] = _sourceBuffer[frame * _sourceChannels];
+            if (_outputChannels == 1)
+            {
+                for (var frame = 0; frame < framesRead; frame++)
+                    buffer[offset + frame] = _sourceBuffer[frame * _sourceChannels];
 
-            return framesRead;
+                return framesRead;
+            }
+
+            for (var frame = 0; frame < framesRead; frame++)
+            {
+                var sourceOffset = frame * _sourceChannels;
+                var destinationOffset = offset + frame * 2;
+                buffer[destinationOffset] = _sourceBuffer[sourceOffset];
+                buffer[destinationOffset + 1] = _sourceBuffer[sourceOffset + 1];
+            }
+
+            return framesRead * 2;
         }
     }
 

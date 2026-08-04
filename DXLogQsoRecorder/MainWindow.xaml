@@ -1,14 +1,14 @@
 <Window x:Class="DXLogQsoRecorder.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="DXLog QSO Recorder v1.2.3 by RK3TD" Icon="AppIcon.ico"
+        Title="DXLog QSO Recorder v1.2.4 by RK3TD" Icon="AppIcon.ico"
         Height="760" Width="1120" MinHeight="680" MinWidth="940"
         WindowStartupLocation="CenterScreen">
     <DockPanel Margin="14">
         <DockPanel DockPanel.Dock="Top" Margin="0,0,0,10">
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" VerticalAlignment="Center">
                 <Image Source="AppIcon.png" Width="36" Height="36" Margin="0,0,10,0"/>
-                <StackPanel><TextBlock Text="DXLog QSO Recorder" FontSize="18" FontWeight="SemiBold"/><TextBlock Text="v1.2.3 by RK3TD" Foreground="Gray"/></StackPanel>
+                <StackPanel><TextBlock Text="DXLog QSO Recorder" FontSize="18" FontWeight="SemiBold"/><TextBlock Text="v1.2.4 by RK3TD" Foreground="Gray"/></StackPanel>
             </StackPanel>
             <Button Content="About" Width="110" Height="30" DockPanel.Dock="Right" Click="AboutButton_Click"/>
         </DockPanel>

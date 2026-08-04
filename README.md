@@ -1,6 +1,6 @@
 # DXLog QSO Recorder
 
-**Version 1.2.3**  
+**Version 1.2.4**  
 Portable audio recorder for DXLog.net  
 Author: Sergey Zimin (RK3TD)
 
@@ -10,7 +10,7 @@ DXLog QSO Recorder automatically saves an audio fragment for every new QSO recei
 
 The application is designed for Windows 10 and Windows 11 and is distributed only as a portable application. It does not require installation and does not use the Windows Registry.
 
-## Highlights of version 1.2.3
+## Highlights of version 1.2.4
 
 - DPI-safe station conflict dialog with readable buttons.
 - Station selection is requested only once per Start/Stop recording session.
@@ -24,14 +24,13 @@ The application is designed for Windows 10 and Windows 11 and is distributed onl
 
 ## Audio processing
 
-Before MP3 encoding, the selected source is normalized to:
+Before MP3 encoding, the selected source is normalized to 24,000 Hz and 16-bit PCM. Channel handling is automatic:
 
-- channel 1 only;
-- 24,000 Hz sample rate;
-- 16-bit PCM;
-- mono.
+- one-channel sources remain mono;
+- two-channel sources remain stereo;
+- sources with three or more channels use channels 1 and 2 only and are saved as stereo.
 
-This allows mono, stereo, four-channel, and other multichannel capture devices to be used without passing an unsupported channel count to LAME.
+This preserves left/right SO2R audio while preventing unsupported multichannel formats from being passed to LAME. No continuous channel-level analysis is performed.
 
 If MP3 encoding fails for any reason, the original recording is preserved as a WAV file.
 
@@ -61,8 +60,8 @@ yyyyMMdd_HHmmss_MYCALL_CALL_BAND_MODE.mp3
 - circular pre-buffer from 1 to 600 seconds;
 - post-buffer from 0 to 600 seconds;
 - MP3 output at 32, 48, or 64 kbps;
-- 24 kHz, 16-bit PCM, mono normalization;
-- first-channel extraction for multichannel sources;
+- 24 kHz, 16-bit PCM normalization with mono/stereo preservation;
+- first-two-channel extraction for sources with three or more channels;
 - automatic WAV fallback;
 - DXLog `contactinfo` XML reception;
 - default bind address `127.0.0.1`;

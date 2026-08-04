@@ -7,9 +7,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>DXLogQsoRecorder</AssemblyName>
     <RootNamespace>DXLogQsoRecorder</RootNamespace>
-    <Version>1.2.3</Version>
-    <AssemblyVersion>1.2.3.0</AssemblyVersion>
-    <FileVersion>1.2.3.0</FileVersion>
+    <Version>1.2.4</Version>
+    <AssemblyVersion>1.2.4.0</AssemblyVersion>
+    <FileVersion>1.2.4.0</FileVersion>
     <Product>DXLog QSO Recorder</Product>
     <Description>Audio recorder for DXLog.net</Description>
     <Authors>Sergey Zimin (RK3TD)</Authors>

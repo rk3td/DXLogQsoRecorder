@@ -13,7 +13,7 @@
                        Margin="0,14,0,0"
                        FontSize="22" FontWeight="SemiBold"
                        TextAlignment="Center"/>
-            <TextBlock Text="Version 1.2.3"
+            <TextBlock Text="Version 1.2.4"
                        Margin="0,5,0,0"
                        TextAlignment="Center"/>
 

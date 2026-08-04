@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.4] - 2026-08-04
+
+### Changed
+
+- Preserve mono recording for one-channel audio sources.
+- Preserve stereo recording for two-channel audio sources.
+- For sources with three or more channels, record only channels 1 and 2 as stereo.
+- Keep 24 kHz, 16-bit PCM normalization and the existing user-selected MP3 bitrate.
+- Avoid continuous channel-level analysis to keep background CPU usage low during contests.
+
 ## [1.2.3] - 2026-08-02
 
 ### Fixed
